@@ -1,0 +1,146 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+  <div class="row mb-5">
+    <div class="col-lg-8 mx-auto text-center">
+      <h1 class="display-4 mb-4">Videos</h1>
+      <p class="lead">Watch informative videos about e-waste management, recycling processes, and sustainable practices.</p>
+    </div>
+  </div>
+
+  <!-- Category Filter -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <button class="btn btn-outline-success active" data-category="all">All</button>
+        <button class="btn btn-outline-success" data-category="Education">Education</button>
+        <button class="btn btn-outline-success" data-category="How-to">How-to</button>
+        <button class="btn btn-outline-success" data-category="Behind the Scenes">Behind the Scenes</button>
+        <button class="btn btn-outline-success" data-category="Sustainability">Sustainability</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Video -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+          <div class="row g-0">
+            <div class="col-lg-8">
+              <div class="ratio ratio-16x9">
+                <iframe src="https://www.youtube.com/embed/ITwYEPCKFkM" title="The E-Waste Crisis Explained" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="p-4">
+                <span class="badge bg-success mb-2">Featured</span>
+                <h2 class="h4 mb-3">The E-Waste Crisis Explained</h2>
+                <p>An overview of the global e-waste problem and its environmental impact. Learn about the scale of the issue and what can be done to address it.</p>
+                <div class="d-flex align-items-center text-muted">
+                  <div class="me-3">
+                    <i class="fas fa-calendar-alt me-1"></i> May 10, 2023
+                  </div>
+                  <div>
+                    <i class="fas fa-clock me-1"></i> 8:24
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Videos Grid -->
+  <div class="row g-4 mb-5">
+    <% videos.forEach((video, index) => { %>
+      <% if (index > 0) { %>
+        <div class="col-md-6 col-lg-4 video-card" data-category="<%= video.category %>">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="position-relative">
+              <img src="<%= video.thumbnail %>" class="card-img-top" alt="<%= video.title %>">
+              <a href="#videoModal<%= video.id %>" data-bs-toggle="modal" class="position-absolute top-50 start-50 translate-middle text-white">
+                <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                  <i class="fas fa-play fa-lg"></i>
+                </div>
+              </a>
+              <span class="position-absolute bottom-0 end-0 bg-dark text-white px-2 py-1 m-2 rounded-pill">
+                <i class="fas fa-clock me-1"></i> <%= video.duration %>
+              </span>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-success"><%= video.category %></span>
+                <small class="text-muted"><%= video.date %></small>
+              </div>
+              <h3 class="card-title h5"><%= video.title %></h3>
+              <p class="card-text"><%= video.description %></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Modal -->
+        <div class="modal fade" id="videoModal<%= video.id %>" tabindex="-1" aria-labelledby="videoModalLabel<%= video.id %>" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="videoModalLabel<%= video.id %>"><%= video.title %></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body p-0">
+                <div class="ratio ratio-16x9">
+                  <iframe src="https://www.youtube.com/embed/<%= video.videoId %>" title="<%= video.title %>" allowfullscreen></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    <% }) %>
+  </div>
+
+  <!-- Call to Action -->
+  <div class="py-5 bg-success text-white rounded-3 mb-5">
+    <div class="container text-center">
+      <h2 class="mb-3">Want to Learn More?</h2>
+      <p class="lead mb-4">Check out our educational resources and articles about e-waste management.</p>
+      <div class="d-flex flex-wrap justify-content-center gap-3">
+        <a href="/articles" class="btn btn-light btn-lg">Read Articles</a>
+        <a href="/education" class="btn btn-outline-light btn-lg">Explore Resources</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for category filtering -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('[data-category]');
+    const videoCards = document.querySelectorAll('.video-card');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        const category = this.getAttribute('data-category');
+        
+        // Show/hide videos based on category
+        videoCards.forEach(card => {
+          if (category === 'all' || card.getAttribute('data-category') === category) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %> 
